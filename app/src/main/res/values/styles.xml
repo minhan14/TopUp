@@ -1,0 +1,54 @@
+<resources>
+    <!-- styles.xml -->
+    <style name="CustomEditTextStyleEnterPhone">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:background">@drawable/mode_card_view_border</item>
+        <item name="android:backgroundTint">#EBEBEB</item>
+        <item name="android:ems">10</item>
+        <item name="android:inputType">textEmailAddress</item>
+        <item name="android:padding">13dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/poppins_light</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">#777777</item>
+    </style>
+
+    <style name="CustomAppCompatButtonStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginBottom">96dp</item>
+        <item name="android:background">@drawable/round_corner_background</item>
+        <item name="android:backgroundTint">@color/material_dynamic_primary60</item>
+        <item name="android:stateListAnimator">@xml/button_animation</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/poppins_light</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="elevation">2dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/black</item>
+        <item name="android:padding">5dp</item>
+
+    </style>
+    <style name="ListItemTextViewStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:fontFamily">@font/poppins_light</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
+    <style name="AppCompatImageButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:stateListAnimator">@xml/button_animation</item>
+    </style>
+</resources>
