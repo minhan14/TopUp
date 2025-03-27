@@ -9,6 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.chicohan.mobiletopup.R
 import com.chicohan.mobiletopup.data.db.AppDatabase
 import com.chicohan.mobiletopup.data.db.dao.TelecomProviderDao
+import com.chicohan.mobiletopup.data.db.dao.TransactionHistoryDao
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
@@ -39,6 +40,11 @@ object AppModule {
     }
 
     @Provides
+    fun provideTransactionDao(database: AppDatabase): TransactionHistoryDao {
+        return database.transactionHistoryDao()
+    }
+
+    @Provides
     @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("currency_prefs", Context.MODE_PRIVATE)
@@ -53,7 +59,6 @@ object AppModule {
             .placeholder(R.drawable.ic_launcher_background)
             .diskCacheStrategy(DiskCacheStrategy.DATA)
     )
-
 
 
     @Provides

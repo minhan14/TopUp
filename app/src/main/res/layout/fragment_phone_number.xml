@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurfaceContainerLowest"
     tools:context=".ui.phoneNumber.PhoneNumberFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -11,77 +12,120 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.02" />
+        app:layout_constraintGuide_percent="0.05" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startguideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.04" />
+        app:layout_constraintGuide_percent="0.05" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/middleguideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.52" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/endguideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.96" />
+        app:layout_constraintGuide_percent="0.95" />
 
-    <TextView
-        android:id="@+id/txtEnterPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:textColor="@color/dim"
-        android:text="@string/please_enter_your_phone_number"
-        app:layout_constraintStart_toStartOf="@+id/startguideline"
-        app:layout_constraintTop_toBottomOf="@+id/middleguideline" />
-
-    <EditText
-        android:id="@+id/edtEnterPhoneNumber"
-        style="@style/CustomEditTextStyleEnterPhone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:hint="+959 xxxxxxxxx or 09 xxxxxxxxx"
-        android:inputType="phone"
-        android:layout_marginTop="15dp"
-        android:padding="10dp"
-        android:textColor="@color/dim"
-        android:textColorHint="#777777"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_robot_view"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toTopOf="@+id/middleguideline"
         app:layout_constraintEnd_toStartOf="@+id/endguideline"
         app:layout_constraintStart_toStartOf="@+id/startguideline"
-        app:layout_constraintTop_toBottomOf="@+id/txtEnterPhone" />
+        app:layout_constraintTop_toTopOf="@+id/topguideline"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/lottie_tree_animation"
+        app:lottie_speed="2.5"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonProceed"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/phone_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/proceed"
-        android:fontFamily="@font/poppins_light"
-        android:textColor="@color/white"
-        android:textAllCaps="false"
-        android:background="@drawable/round_corner_background"
-        android:stateListAnimator="@xml/button_animation"
-        app:layout_constraintEnd_toStartOf="@+id/endguideline"
-        app:layout_constraintStart_toStartOf="@+id/startguideline"
-        app:layout_constraintTop_toBottomOf="@+id/edtEnterPhoneNumber"
+        android:layout_marginTop="24dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp"
+        style="@style/Widget.Material3.CardView.Elevated"
+        app:layout_constraintEnd_toEndOf="@+id/endguideline"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.17" />
+        app:layout_constraintVertical_bias="0.18"
+        app:layout_constraintStart_toStartOf="@+id/startguideline"
+        app:layout_constraintTop_toBottomOf="@+id/middleguideline">
 
-    <ProgressBar
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/txtEnterPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mochipop_p_one"
+                android:text="@string/please_enter_your_phone_number"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phone_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="@string/phone_number_hint"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                app:hintTextColor="?attr/colorPrimary"
+                app:boxStrokeColor="?attr/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtEnterPhoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/mochipop_p_one"
+                    android:inputType="phone"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonProceed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/mochipop_p_one"
+                android:text="@string/proceed"
+                android:textAllCaps="false"
+                android:stateListAnimator="@xml/button_animation"
+                style="@style/Widget.Material3.Button"
+                app:cornerRadius="16dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:indeterminate="true"
+        app:indicatorColor="?attr/colorPrimary"
+        app:trackColor="?attr/colorSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

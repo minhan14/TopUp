@@ -1,42 +1,60 @@
 package com.chicohan.mobiletopup.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chicohan.mobiletopup.helper.PreferencesHelper
+import com.chicohan.mobiletopup.data.db.entity.ProviderType
 import com.chicohan.mobiletopup.data.db.entity.TelecomProvider
+import com.chicohan.mobiletopup.data.db.entity.TransactionHistory
+import com.chicohan.mobiletopup.data.db.entity.TransactionStatus
+import com.chicohan.mobiletopup.data.db.entity.getName
+import com.chicohan.mobiletopup.data.db.model.DataPlan
 import com.chicohan.mobiletopup.domain.model.UIState
-import com.chicohan.mobiletopup.domain.repository.TelecomRepository
-import com.chicohan.mobiletopup.domain.useCases.UseCases
+import com.chicohan.mobiletopup.domain.repository.DataPlanRepository
+import com.chicohan.mobiletopup.domain.repository.TransactionHistoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val useCases: UseCases,
-    private val repository: TelecomRepository,
-    preferencesHelper: PreferencesHelper
+    private val dataPlanRepository: DataPlanRepository,
+    private val transactionHistoryRepository: TransactionHistoryRepository
 ) : ViewModel() {
 
-    private val _baseCurrencyState = MutableStateFlow<UIState<TelecomProvider?>>(UIState.Idle)
-    val baseCurrencyState = _baseCurrencyState.asStateFlow()
+    var currentProvider = MutableStateFlow<TelecomProvider?>(null); private set
+    var selectedDataPlan = MutableStateFlow<DataPlan?>(null); private set
 
-    init {
-        /*
-        Check if this is the first run
-        for one time event , initialize default providers
-         */
-        viewModelScope.launch {
-            if (preferencesHelper.isFirstRun()) {
-                repository.initializeProviders()
-                preferencesHelper.setFirstRunCompleted()
-            }
+    private val _confirmPaymentUiState = MutableStateFlow<UIState<TransactionHistory>>(UIState.Idle)
+    val confirmPaymentUiState = _confirmPaymentUiState.asStateFlow()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val currentDataPlans = currentProvider.flatMapLatest { provider ->
+        provider?.let {
+            dataPlanRepository.getDataPlansByProvider(it)
+        } ?: flowOf(emptyList())
+    }.map { dataPlans -> dataPlans.sortedBy { it.amount } }
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+
+    fun confirmPayment(transactionHistory: TransactionHistory) = viewModelScope.launch {
+        _confirmPaymentUiState.update { UIState.Loading }
+        val pendingTransaction = transactionHistory.copy(status = TransactionStatus.PENDING)
+        transactionHistoryRepository.saveTransaction(pendingTransaction)
+        delay(2000L)
+        val errorTransaction = transactionHistory.copy(status = TransactionStatus.FAILED)
+        val successTransaction = transactionHistory.copy(status = TransactionStatus.SUCCESS)
+        val finalStatus = if ((0..1).random() == 0) successTransaction else errorTransaction
+        transactionHistoryRepository.saveTransaction(finalStatus)
+        _confirmPaymentUiState.update {
+            UIState.Success(finalStatus)
         }
-
     }
+
+    fun setTelecomProvider(provider: TelecomProvider) = currentProvider.update { provider }
+    fun selectedDataPlan(item: DataPlan) = selectedDataPlan.update { item }
+    fun resetPaymentUiState() = _confirmPaymentUiState.update { UIState.Idle }
 
 }

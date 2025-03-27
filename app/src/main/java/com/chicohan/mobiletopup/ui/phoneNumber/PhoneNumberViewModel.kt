@@ -9,6 +9,7 @@ import com.chicohan.mobiletopup.domain.repository.TelecomRepository
 import com.chicohan.mobiletopup.domain.useCases.UseCases
 import com.chicohan.mobiletopup.helper.PreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -45,15 +46,10 @@ class PhoneNumberViewModel @Inject constructor(
 
     fun validatePhoneNumber(phoneNumber: String) = viewModelScope.launch {
         phNumberUiState.update { it.copy(loading = true) }
-
         val provider = runCatching { useCases.detectProviderUseCase(phoneNumber) }
             .getOrElse { error ->
                 return@launch phNumberUiState.update {
-                    it.copy(
-                        loading = false,
-                        isSuccess = Event(null),
-                        errorMessage = Event(error.message)
-                    )
+                    it.copy(loading = false, isSuccess = Event(null), errorMessage = Event(error.message))
                 }
             }
 
@@ -70,6 +66,11 @@ class PhoneNumberViewModel @Inject constructor(
                     } else "Cannot find the provider for current phone number!!!")
             )
         }
+    }
+
+    fun changePhoneNumber() = viewModelScope.launch {
+        preferencesHelper.clearPhoneNumber()
+        currentPhoneNumber.update { null }
     }
 }
 

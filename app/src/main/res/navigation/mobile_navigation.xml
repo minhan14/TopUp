@@ -9,14 +9,35 @@
         android:id="@+id/mainFragment"
         android:name="com.chicohan.mobiletopup.ui.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_phoneNumberFragment"
             app:destination="@id/phoneNumberFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_transactionHistoryFragment"
+            app:destination="@id/transactionHistoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/phoneNumberFragment"
         android:name="com.chicohan.mobiletopup.ui.phoneNumber.PhoneNumberFragment"
         android:label="fragment_phone_number"
         tools:layout="@layout/fragment_phone_number" />
+    <fragment
+        android:id="@+id/transactionSuccessFragment"
+        android:name="com.chicohan.mobiletopup.ui.transactions.TransactionSuccessFragment"
+        android:label="TransactionSuccessFragment"
+        tools:layout="@layout/fragment_transaction_success">
+        <argument
+            android:name="transactionDetailArgs"
+            app:argType="com.chicohan.mobiletopup.data.db.entity.TransactionHistory"
+            app:nullable="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_transactionSuccessFragment"
+        app:destination="@id/transactionSuccessFragment" />
+    <fragment
+        android:id="@+id/transactionHistoryFragment"
+        android:name="com.chicohan.mobiletopup.ui.transactions.TransactionHistoryFragment"
+        android:label="fragment_transaction_history"
+        tools:layout="@layout/fragment_transaction_history" />
 </navigation>

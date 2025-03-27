@@ -1,117 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurfaceContainerLowest"
+    android:fillViewport="true"
     tools:context=".ui.main.MainFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal_start_guide_line"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.025" />
+        android:paddingBottom="16dp">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical_start_guide_line"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.08" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horizontal_start_guide_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.025" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical_end_guide_line"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.92" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vertical_start_guide_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animation_robot_view"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:stateListAnimator="@xml/button_animation"
-        app:layout_constraintStart_toStartOf="@id/vertical_start_guide_line"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_start_guide_line"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/lottie_tree_animation"
-        app:lottie_speed="2.5"
-        app:shapeAppearanceOverlay="@style/circleImageView" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vertical_end_guide_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
 
-    <TextView
-        android:id="@+id/txtHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:fontFamily="@font/poppins"
-        android:paddingStart="10dp"
-        android:text="Welcome"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/animation_robot_view"
-        app:layout_constraintStart_toEndOf="@id/animation_robot_view"
-        app:layout_constraintTop_toTopOf="@id/animation_robot_view" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_tree_view"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintEnd_toEndOf="@id/vertical_end_guide_line"
+            app:layout_constraintTop_toBottomOf="@id/horizontal_start_guide_line"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_tree_animation"
+            app:lottie_speed="2.5"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvRoot"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:focusable="true"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="15dp"
-        app:layout_constraintEnd_toEndOf="@id/vertical_end_guide_line"
-        app:layout_constraintStart_toStartOf="@id/vertical_start_guide_line"
-        app:layout_constraintTop_toBottomOf="@id/txtHeader">
+        <TextView
+            android:id="@+id/txtHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/mochipop_p_one"
+            android:text="Top Up"
+            android:textAppearance="?attr/textAppearanceHeadlineSmall"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintBottom_toBottomOf="@id/animation_tree_view"
+            app:layout_constraintStart_toStartOf="@id/vertical_start_guide_line"
+            app:layout_constraintTop_toTopOf="@id/animation_tree_view" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvRoot"
+            style="@style/Widget.Material3.CardView.Elevated"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@id/vertical_end_guide_line"
+            app:layout_constraintStart_toStartOf="@id/vertical_start_guide_line"
+            app:layout_constraintTop_toBottomOf="@id/txtHeader"
+            app:strokeColor="?attr/colorOutlineVariant"
+            app:strokeWidth="1dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/ivMyPhoto"
-                android:layout_margin="8dp">
+                android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/txtProvider"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Balance"
-                    android:paddingStart="5dp"
-                    android:textSize="11sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/ivProviderIcon">
+
+                    <TextView
+                        android:id="@+id/txtProvider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/mochipop_p_one"
+                        android:text="Atom Myanmar"
+                        android:textAppearance="?attr/textAppearanceLabelSmall"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/txtPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/mochipop_p_one"
+                        android:text="@string/loading"
+                        android:textAppearance="?attr/textAppearanceBodyLarge"
+                        android:textColor="?attr/colorSecondary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txtProvider" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivProviderIcon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/loading"
+                    android:src="@drawable/atom_logo"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/actionsContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@id/vertical_end_guide_line"
+            app:layout_constraintStart_toStartOf="@id/vertical_start_guide_line"
+            app:layout_constraintTop_toBottomOf="@id/cvRoot">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <TextView
-                    android:id="@+id/txtPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
-                    android:padding="5dp"
-                    android:text="@string/loading"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txtProvider" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <ImageView
-                android:id="@+id/ivProviderIcon"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_alignParentEnd="true"
-                android:contentDescription="@string/loading"
-                android:scaleType="centerCrop"
-                android:src="@drawable/atom_logo" />
-        </RelativeLayout>
+                    android:fontFamily="@font/mochipop_p_one"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="Quick Actions"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRecharge"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:fontFamily="@font/mochipop_p_one"
+                    android:text="@string/proceed_to_recharge"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconGravity="textStart" />
 
-    </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnHistory"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:fontFamily="@font/mochipop_p_one"
+                    android:text="@string/transaction_history"
+                    app:icon="@android:drawable/ic_menu_recent_history"
+                    app:iconGravity="textStart" />
 
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/data_plans_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="@id/vertical_end_guide_line"
+            app:layout_constraintStart_toStartOf="@id/vertical_start_guide_line"
+            app:layout_constraintTop_toBottomOf="@id/actionsContainer">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/mochipop_p_one"
+                    android:paddingStart="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/data_plans"
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDataPlans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingVertical="8dp"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/item_data_plan" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
