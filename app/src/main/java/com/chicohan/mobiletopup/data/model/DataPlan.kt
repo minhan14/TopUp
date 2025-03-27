@@ -1,4 +1,4 @@
-package com.chicohan.mobiletopup.data.db.model
+package com.chicohan.mobiletopup.data.model
 
 import android.os.Parcelable
 import com.chicohan.mobiletopup.data.db.entity.ProviderType

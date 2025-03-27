@@ -12,7 +12,7 @@ import com.chicohan.mobiletopup.data.db.entity.TransactionHistory
 import com.chicohan.mobiletopup.data.db.entity.TransactionStatus
 import com.chicohan.mobiletopup.data.db.entity.getDetailTransactionTypeName
 import com.chicohan.mobiletopup.data.db.entity.getName
-import com.chicohan.mobiletopup.data.db.model.DataPlan
+import com.chicohan.mobiletopup.data.model.DataPlan
 import com.chicohan.mobiletopup.databinding.ItemDataPlanBinding
 import com.chicohan.mobiletopup.databinding.ItemTransactionHistoryBinding
 

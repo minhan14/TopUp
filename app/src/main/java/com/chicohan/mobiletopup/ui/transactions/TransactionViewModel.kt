@@ -6,7 +6,7 @@ import com.chicohan.mobiletopup.data.db.entity.ProviderType
 import com.chicohan.mobiletopup.data.db.entity.TelecomProvider
 import com.chicohan.mobiletopup.data.db.entity.TransactionStatus
 import com.chicohan.mobiletopup.data.db.entity.getName
-import com.chicohan.mobiletopup.data.db.model.DataPlan
+import com.chicohan.mobiletopup.data.model.DataPlan
 import com.chicohan.mobiletopup.domain.repository.TransactionHistoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

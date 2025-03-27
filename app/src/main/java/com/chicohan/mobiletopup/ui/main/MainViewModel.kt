@@ -2,12 +2,11 @@ package com.chicohan.mobiletopup.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chicohan.mobiletopup.data.db.entity.ProviderType
 import com.chicohan.mobiletopup.data.db.entity.TelecomProvider
 import com.chicohan.mobiletopup.data.db.entity.TransactionHistory
 import com.chicohan.mobiletopup.data.db.entity.TransactionStatus
-import com.chicohan.mobiletopup.data.db.entity.getName
-import com.chicohan.mobiletopup.data.db.model.DataPlan
+import com.chicohan.mobiletopup.data.model.DataPlan
+import com.chicohan.mobiletopup.data.model.RechargeData
 import com.chicohan.mobiletopup.domain.model.UIState
 import com.chicohan.mobiletopup.domain.repository.DataPlanRepository
 import com.chicohan.mobiletopup.domain.repository.TransactionHistoryRepository
@@ -26,6 +25,8 @@ class MainViewModel @Inject constructor(
 
     var currentProvider = MutableStateFlow<TelecomProvider?>(null); private set
     var selectedDataPlan = MutableStateFlow<DataPlan?>(null); private set
+    var selectedRechargePlan = MutableStateFlow<RechargeData?>(null); private set
+
 
     private val _confirmPaymentUiState = MutableStateFlow<UIState<TransactionHistory>>(UIState.Idle)
     val confirmPaymentUiState = _confirmPaymentUiState.asStateFlow()
@@ -34,6 +35,14 @@ class MainViewModel @Inject constructor(
     val currentDataPlans = currentProvider.flatMapLatest { provider ->
         provider?.let {
             dataPlanRepository.getDataPlansByProvider(it)
+        } ?: flowOf(emptyList())
+    }.map { dataPlans -> dataPlans.sortedBy { it.amount } }
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val currentRechargePlans = currentProvider.flatMapLatest { provider ->
+        provider?.let {
+            dataPlanRepository.getRechargePlanByProvider(it)
         } ?: flowOf(emptyList())
     }.map { dataPlans -> dataPlans.sortedBy { it.amount } }
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
@@ -54,7 +63,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun setTelecomProvider(provider: TelecomProvider) = currentProvider.update { provider }
-    fun selectedDataPlan(item: DataPlan) = selectedDataPlan.update { item }
+    fun setSelectedDataPlan(item: DataPlan) = selectedDataPlan.update { item }
+    fun setSelectedRechargePlan(item: RechargeData?) = selectedRechargePlan.update { item }
+    fun resetSelectedPlans() = selectedDataPlan.update { null }
     fun resetPaymentUiState() = _confirmPaymentUiState.update { UIState.Idle }
 
 }

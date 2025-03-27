@@ -3,7 +3,8 @@ package com.chicohan.mobiletopup.data.repository
 import com.chicohan.mobiletopup.R
 import com.chicohan.mobiletopup.data.db.entity.ProviderType
 import com.chicohan.mobiletopup.data.db.entity.TelecomProvider
-import com.chicohan.mobiletopup.data.db.model.DataPlan
+import com.chicohan.mobiletopup.data.model.DataPlan
+import com.chicohan.mobiletopup.data.model.RechargeData
 
 import com.chicohan.mobiletopup.domain.repository.DataPlanRepository
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class DataPlanRepositoryImpl @Inject constructor() : DataPlanRepository {
+
     private val dataPlans = listOf(
         DataPlan(
             id = "ooredoo_1",
@@ -29,7 +31,7 @@ class DataPlanRepositoryImpl @Inject constructor() : DataPlanRepository {
             providerType = ProviderType.OOREDOO,
             description = "20GB for 30 days",
             duration = "Valid for 30 days",
-            amount = 8000.0,
+            amount = 10000.0,
             dataAmount = "20GB",
             validityDays = 30,
             isPopular = true,
@@ -46,6 +48,16 @@ class DataPlanRepositoryImpl @Inject constructor() : DataPlanRepository {
             validityDays = 7,
             iconResId = R.drawable.icon_leave
 
+        ),
+        DataPlan(
+            id = "ooredoo_4",
+            providerType = ProviderType.OOREDOO,
+            description = "15GB for 30 days",
+            duration = "Valid for 30 days",
+            amount = 8000.0,
+            dataAmount = "15GB",
+            validityDays = 30,
+            iconResId = R.drawable.icon_cat
         ),
 
         DataPlan(
@@ -119,7 +131,15 @@ class DataPlanRepositoryImpl @Inject constructor() : DataPlanRepository {
             iconResId = R.drawable.icon_cat
         )
     )
+    private val rechargeAmounts = listOf(1000.0, 3000.0, 5000.0, 10000.0,20000.0)
 
+    override fun getRechargePlanByProvider(provider: TelecomProvider): Flow<List<RechargeData>> =
+        flow {
+            val rechargePlans = rechargeAmounts.mapIndexed { index, amount ->
+                RechargeData(id = index + 1, amount = amount, providerType = provider.type)
+            }
+            emit(rechargePlans)
+        }
 
     override fun getDataPlansByProvider(provider: TelecomProvider): Flow<List<DataPlan>> = flow {
         emit(dataPlans.filter { it.providerType == provider.type })

@@ -51,20 +51,20 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/phone_card"
+        style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
-        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+        app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
-        app:strokeColor="?attr/colorOutlineVariant"
-        app:strokeWidth="1dp"
-        style="@style/Widget.Material3.CardView.Elevated"
-        app:layout_constraintEnd_toEndOf="@+id/endguideline"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.18"
+        app:layout_constraintEnd_toEndOf="@+id/endguideline"
         app:layout_constraintStart_toStartOf="@+id/startguideline"
-        app:layout_constraintTop_toBottomOf="@+id/middleguideline">
+        app:layout_constraintTop_toBottomOf="@+id/middleguideline"
+        app:layout_constraintVertical_bias="0.18"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,13 +83,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/phone_input_layout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:hint="@string/phone_number_hint"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                app:hintTextColor="?attr/colorPrimary"
-                app:boxStrokeColor="?attr/colorPrimary">
+                app:boxCornerRadiusBottomEnd="24dp"
+                app:boxCornerRadiusBottomStart="24dp"
+                app:boxCornerRadiusTopEnd="24dp"
+                app:boxCornerRadiusTopStart="24dp"
+                app:hintTextColor="?attr/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtEnterPhoneNumber"
@@ -103,31 +106,41 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonProceed"
+                style="@style/Widget.Material3.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="10dp"
-                android:fontFamily="@font/mochipop_p_one"
-                android:text="@string/proceed"
-                android:textAllCaps="false"
+                android:padding="16dp"
                 android:stateListAnimator="@xml/button_animation"
-                style="@style/Widget.Material3.Button"
-                app:cornerRadius="16dp" />
+                android:text="@string/proceed"
+                android:textAppearance="?attr/textAppearanceLabelLarge" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-
+    <TextView
+        android:id="@+id/txtWelcom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mochipop_p_one"
+        android:text="Welcome"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:layout_constraintEnd_toEndOf="@id/endguideline"
+        app:layout_constraintStart_toStartOf="@id/startguideline"
+        app:layout_constraintTop_toBottomOf="@id/phone_card" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:indeterminate="true"
+        android:visibility="gone"
         app:indicatorColor="?attr/colorPrimary"
-        app:trackColor="?attr/colorSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:trackColor="?attr/colorSurfaceVariant" />
 </androidx.constraintlayout.widget.ConstraintLayout>

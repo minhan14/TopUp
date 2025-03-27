@@ -18,10 +18,11 @@
     <string name="amount">Amount:</string>
     <string name="transaction_successful">Transaction Successful!</string>
     <string name="proceed_to_recharge">Proceed To Recharge</string>
-    <string name="transaction_history">Transaction History :</string>
+    <string name="transaction_history">Transaction History</string>
     <string name="transaction_type">Transaction Type :</string>
     <string name="date">Date :</string>
     <string name="no_transactions_found">No transactions found</string>
     <string name="search_transactions">Search transactions</string>
     <string name="success">Success</string>
+    <string name="quick_actions">Quick Actions</string>
 </resources>

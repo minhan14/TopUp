@@ -11,14 +11,14 @@ import com.bumptech.glide.RequestManager
 import com.chicohan.mobiletopup.R
 import com.chicohan.mobiletopup.data.db.entity.TransactionType
 import com.chicohan.mobiletopup.data.db.entity.getName
-import com.chicohan.mobiletopup.data.db.model.DataPlan
-import com.chicohan.mobiletopup.databinding.BottomSheetPaymentBinding
 import com.chicohan.mobiletopup.databinding.FragmentMainBinding
+import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateResume
 import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateStart
 import com.chicohan.mobiletopup.helper.toast
 import com.chicohan.mobiletopup.ui.adapter.DataPlanAdapter
 import com.chicohan.mobiletopup.ui.payment.PaymentBottomSheet
 import com.chicohan.mobiletopup.ui.phoneNumber.PhoneNumberViewModel
+import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -33,7 +33,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val dataPlanAdapter by lazy {
         DataPlanAdapter(glide) { item ->
-            showPaymentBottomSheet(item, TransactionType.DATA_PACK)
+            mainViewModel.setSelectedDataPlan(item)
+            showPaymentBottomSheet(TransactionType.DATA_PACK)
         }
     }
 
@@ -44,9 +45,29 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
         initViews()
+        observeRechargePlans()
         observePhoneNumber()
         observeProviderInfo()
         observeDataPlans()
+    }
+
+    private fun observeRechargePlans() = with(binding) {
+        collectFlowWithLifeCycleAtStateResume(mainViewModel.currentRechargePlans) { rechargePlans ->
+            rechargePlans.forEachIndexed { i, item ->
+                val selected = mainViewModel.selectedRechargePlan.value
+                val chip = layoutInflater.inflate(R.layout.item_chips, rechargeGroup, false) as Chip
+                chip.apply {
+                    text = item.getFormattedAmount()
+                    isCheckable = true
+                    isChecked = (item == selected)
+                    setOnClickListener {
+                        mainViewModel.setSelectedRechargePlan(if (isChecked) item else null)
+                    }
+                    rechargeGroup.addView(this)
+                }
+
+            }
+        }
     }
 
     private fun observePhoneNumber() =
@@ -79,28 +100,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             dataPlanAdapter.submitList(it)
         }
 
-    private fun showPaymentBottomSheet(dataPlan: DataPlan, transactionType: TransactionType) {
-        mainViewModel.selectedDataPlan(dataPlan)
+    private fun showPaymentBottomSheet(transactionType: TransactionType) {
         PaymentBottomSheet(
             transactionType = transactionType
         ).show(childFragmentManager, PaymentBottomSheet.TAG)
 
-    }
-
-    private fun handlePaymentConfirmation(dataPlan: DataPlan) {
-        // Navigate to success screen with transaction details
-//        val action = MainFragmentDirections.actionMainFragmentToTransactionSuccessFragment(
-//            transactionId = generateTransactionId(),
-//            providerName = mainViewModel.currentProvider.value?.getName() ?: "",
-//            dataPlan = "${dataPlan.dataAmount} for ${dataPlan.validityDays} Days",
-//            amount = "${dataPlan.amount} MMK",
-//            phoneNumber = phoneNumberViewModel.currentPhoneNumber.value ?: ""
-//        )
-        findNavController().navigate(R.id.action_global_transactionSuccessFragment)
-    }
-
-    private fun generateTransactionId(): String {
-        return "TXN${System.currentTimeMillis()}"
     }
 
     private fun initViews() = with(binding) {
@@ -113,6 +117,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
         btnHistory.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_transactionHistoryFragment)
+        }
+        btnRecharge.setOnClickListener {
+            val currentRechargePlan = mainViewModel.selectedRechargePlan.value
+            currentRechargePlan?.let {
+                showPaymentBottomSheet(TransactionType.RECHARGE)
+            } ?: run { requireContext().toast("Please Select a recharge Plan") }
         }
     }
 }
