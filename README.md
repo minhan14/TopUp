@@ -13,7 +13,7 @@ material3 https://material-foundation.github.io/material-theme-builder/
 
 | Phone Screen | Main Screen | Detail Screen |
 |-------------|------------|--------------|
-| <img src="screenshots/phone.png" width="30%"> | <img src="screenshots/main.png" width="30%"> | <img src="screenshots/detail.png" width="30%"> |
+| <img src="screenshots/phone.png"> | <img src="screenshots/main.png"> | <img src="screenshots/detail.png"> |
 
 | History Screen |
 |--------------|
