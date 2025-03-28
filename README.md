@@ -9,15 +9,14 @@ material3 https://material-foundation.github.io/material-theme-builder/
 - Displays available top-up and data packages.
 - Transaction history with filters and search.
 
-## Screenshots
+## App Screenshots
 
-| Phone Screen | Main Screen | Transaction Screen | Detail Screen |
-<div align="center">
-<img src="screenshots/phone.png" width="30%">
-<img src="screenshots/main.png" width="30%">
-<img src="screenshots/detail.png" width="30%">
-</div>
-<div>
-<img src="screenshots/history.png" width="30%">
-</div>
+| Phone Screen | Main Screen | Detail Screen |
+|-------------|------------|--------------|
+| <img src="screenshots/phone.png" width="30%"> | <img src="screenshots/main.png" width="30%"> | <img src="screenshots/detail.png" width="30%"> |
+
+| History Screen |
+|--------------|
+| <img src="screenshots/history.png" width="30%"> |
+
 
