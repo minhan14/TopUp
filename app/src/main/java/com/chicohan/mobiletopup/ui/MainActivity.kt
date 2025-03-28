@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().setKeepOnScreenCondition { keepOn }
         GlobalScope.launch {
-            delay(3 * 1000)
+            delay(2 * 1000L)
             keepOn = false
         }
         enableEdgeToEdge()

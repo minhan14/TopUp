@@ -26,7 +26,7 @@ data class TransactionHistory(
         return "%,.0f %s".format(amount, currency)
     }
     fun getFormattedTransactionTime(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val sdf = SimpleDateFormat("yyyy-MM-dd h:mm a", Locale.getDefault())
         return sdf.format(Date(transactionTime))
     }
 }

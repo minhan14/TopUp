@@ -123,7 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/mochipop_p_one"
-        android:text="Welcome"
+        android:text="@string/welcome"
         android:layout_marginTop="10dp"
         android:textAppearance="?attr/textAppearanceTitleSmall"
         android:textColor="?attr/colorOnSurfaceVariant"

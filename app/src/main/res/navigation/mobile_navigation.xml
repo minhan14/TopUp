@@ -15,7 +15,11 @@
             app:destination="@id/phoneNumberFragment" />
         <action
             android:id="@+id/action_mainFragment_to_transactionHistoryFragment"
-            app:destination="@id/transactionHistoryFragment" />
+            app:destination="@id/transactionHistoryFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/phoneNumberFragment"
@@ -34,7 +38,12 @@
     </fragment>
     <action
         android:id="@+id/action_global_transactionSuccessFragment"
-        app:destination="@id/transactionSuccessFragment" />
+        app:destination="@id/transactionSuccessFragment"
+        app:enterAnim="@anim/from_right"
+        app:exitAnim="@anim/to_left"
+        app:popEnterAnim="@anim/from_left"
+        app:popExitAnim="@anim/to_right" />
+
     <fragment
         android:id="@+id/transactionHistoryFragment"
         android:name="com.chicohan.mobiletopup.ui.transactions.TransactionHistoryFragment"

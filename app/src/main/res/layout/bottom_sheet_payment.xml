@@ -13,11 +13,29 @@
         app:cardCornerRadius="28dp"
         app:cardElevation="0dp">
 
+        <ImageButton
+            android:id="@+id/btnDismiss"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/dismiss"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/baseline_clear_24"
+            android:stateListAnimator="@xml/button_animation" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
+
 
             <TextView
                 android:layout_width="match_parent"

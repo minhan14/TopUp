@@ -25,4 +25,12 @@
     <string name="search_transactions">Search transactions</string>
     <string name="success">Success</string>
     <string name="quick_actions">Quick Actions</string>
+    <string name="dismiss">dismiss</string>
+    <string name="select">Select</string>
+    <string name="welcome">Welcome</string>
+    <string name="clear">Clear</string>
+    <string name="filter_by_date">Filter by Date</string>
+    <string name="date_filter_icon">Date filter icon</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
 </resources>

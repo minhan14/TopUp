@@ -9,11 +9,8 @@ import com.bumptech.glide.RequestManager
 import com.chicohan.mobiletopup.R
 import com.chicohan.mobiletopup.data.db.entity.ProviderType
 import com.chicohan.mobiletopup.data.db.entity.TransactionHistory
-import com.chicohan.mobiletopup.data.db.entity.TransactionStatus
 import com.chicohan.mobiletopup.data.db.entity.getDetailTransactionTypeName
 import com.chicohan.mobiletopup.data.db.entity.getName
-import com.chicohan.mobiletopup.data.model.DataPlan
-import com.chicohan.mobiletopup.databinding.ItemDataPlanBinding
 import com.chicohan.mobiletopup.databinding.ItemTransactionHistoryBinding
 
 class TransactionHistoryAdapter(
@@ -62,28 +59,19 @@ class TransactionHistoryAdapter(
             chipStatus.text = item.status.name
             tvTransactionType.text =
                 item.transactionType.getDetailTransactionTypeName(item.providerType)
-
             when (item.providerType) {
                 ProviderType.ATOM -> animationState.setImageResource(R.drawable.atom_logo)
                 ProviderType.MPT -> animationState.setImageResource(R.drawable.mpt_logo)
                 ProviderType.OOREDOO -> animationState.setImageResource(R.drawable.ooredoo_logo)
                 ProviderType.UNKNOWN -> Unit
             }
-
 //            when (item.status) {
-//                TransactionStatus.SUCCESS -> {
-//                    animationState.setAnimation(R.raw.lottie_payment_success)
-//                    animationState.playAnimation()
-//                }
-//                TransactionStatus.FAILED -> {
-//                    animationState.setAnimation(R.raw.lottie_error_animation)
-//                    animationState.playAnimation()
-//                }
-//                TransactionStatus.PENDING -> {
-//                    animationState.setAnimation(R.raw.lottie_loading_animation)
-//                    animationState.playAnimation()
-//                }
+//                TransactionStatus.SUCCESS -> animationState.setAnimation(R.raw.lottie_payment_success)
+//                TransactionStatus.PENDING -> Unit
+//                TransactionStatus.FAILED -> animationState.setAnimation(R.raw.lottie_error_animation)
+//
 //            }
+//            glide.load(item.pr).into(ivDataIcon)
         }
     }
 }

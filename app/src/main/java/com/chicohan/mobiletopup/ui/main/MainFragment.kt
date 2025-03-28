@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import com.chicohan.mobiletopup.R
+import com.chicohan.mobiletopup.data.db.entity.ProviderType
 import com.chicohan.mobiletopup.data.db.entity.TransactionType
 import com.chicohan.mobiletopup.data.db.entity.getName
 import com.chicohan.mobiletopup.databinding.FragmentMainBinding
+import com.chicohan.mobiletopup.databinding.ItemChipsBinding
 import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateResume
 import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateStart
 import com.chicohan.mobiletopup.helper.toast
@@ -37,7 +40,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             showPaymentBottomSheet(TransactionType.DATA_PACK)
         }
     }
-
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val phoneNumberViewModel by activityViewModels<PhoneNumberViewModel>()
 
@@ -52,10 +54,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun observeRechargePlans() = with(binding) {
-        collectFlowWithLifeCycleAtStateResume(mainViewModel.currentRechargePlans) { rechargePlans ->
-            rechargePlans.forEachIndexed { i, item ->
+        collectFlowWithLifeCycleAtStateStart(mainViewModel.currentRechargePlans) { rechargePlans ->
+            Log.d("chip", "collected $rechargePlans")
+            rechargeGroup.removeAllViews()
+            rechargePlans.forEachIndexed { _, item ->
                 val selected = mainViewModel.selectedRechargePlan.value
-                val chip = layoutInflater.inflate(R.layout.item_chips, rechargeGroup, false) as Chip
+                val chip =
+                    ItemChipsBinding.inflate(layoutInflater, rechargeGroup, false).root as Chip
                 chip.apply {
                     text = item.getFormattedAmount()
                     isCheckable = true
@@ -89,7 +94,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         "Provider: ${providerInfo.type.getName()}, LogoPath: ${providerInfo.logoPath}"
                     )
                     binding.txtProvider.text = providerInfo.type.getName()
-                    binding.ivProviderIcon.setImageResource(providerInfo.logoPath)
+                    val logo = when (providerInfo.type) {
+                        ProviderType.ATOM -> R.drawable.atom_logo
+                        ProviderType.MPT -> R.drawable.mpt_logo
+                        ProviderType.OOREDOO -> R.drawable.ooredoo_logo
+                        ProviderType.UNKNOWN -> 0
+                    }
+                    glide.load(logo).into(binding.ivProviderIcon)
+//                    glide.load(providerInfo.logoPath).into(binding.ivProviderIcon)
                     mainViewModel.setTelecomProvider(providerInfo)
                 }
             }
@@ -101,10 +113,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
 
     private fun showPaymentBottomSheet(transactionType: TransactionType) {
-        PaymentBottomSheet(
-            transactionType = transactionType
-        ).show(childFragmentManager, PaymentBottomSheet.TAG)
-
+        val phone = phoneNumberViewModel.currentPhoneNumber.value ?: return
+        PaymentBottomSheet.newInstance(transactionType, phone)
+            .show(childFragmentManager, PaymentBottomSheet.TAG)
     }
 
     private fun initViews() = with(binding) {
@@ -112,7 +123,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = dataPlanAdapter
         }
-        animationTreeView.setOnClickListener {
+        btnResetPhoneNumber.setOnClickListener {
             phoneNumberViewModel.changePhoneNumber()
         }
         btnHistory.setOnClickListener {

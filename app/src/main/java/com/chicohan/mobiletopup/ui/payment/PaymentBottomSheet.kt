@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.chicohan.mobiletopup.MobileNavigationDirections
 import com.chicohan.mobiletopup.R
-import com.chicohan.mobiletopup.data.db.entity.TelecomProvider
+import com.chicohan.mobiletopup.data.db.entity.ProviderType
 import com.chicohan.mobiletopup.data.db.entity.TransactionHistory
 import com.chicohan.mobiletopup.data.db.entity.TransactionType
 import com.chicohan.mobiletopup.data.db.entity.getName
@@ -21,72 +18,54 @@ import com.chicohan.mobiletopup.data.model.RechargeData
 import com.chicohan.mobiletopup.databinding.BottomSheetPaymentBinding
 import com.chicohan.mobiletopup.domain.model.UIState
 import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateResume
-import com.chicohan.mobiletopup.helper.toast
+import com.chicohan.mobiletopup.helper.serializable
+import com.chicohan.mobiletopup.helper.viewBinding
 import com.chicohan.mobiletopup.helper.visible
 import com.chicohan.mobiletopup.ui.main.MainViewModel
-import com.chicohan.mobiletopup.ui.phoneNumber.PhoneNumberViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PaymentBottomSheet(private val transactionType: TransactionType) :
-    BottomSheetDialogFragment() {
+class PaymentBottomSheet : BottomSheetDialogFragment() {
 
-    private var _binding: BottomSheetPaymentBinding? = null
-    private val binding get() = _binding!!
+    private val binding: BottomSheetPaymentBinding by viewBinding(BottomSheetPaymentBinding::inflate)
 
-    private val phoneNumberViewModel: PhoneNumberViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
 
+    private val transactionType: TransactionType? by lazy {
+        arguments?.serializable(
+            ARG_TRANSACTION_TYPE
+        )
+    }
+    private val phoneNumber: String? by lazy { arguments?.getString(ARG_PHONE_NUMBER) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isCancelable = false
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = BottomSheetPaymentBinding.inflate(inflater, container, false)
-        isCancelable = false
-        return binding.root
+    ): View = binding.root
+
+    private fun setupListeners() = with(binding) {
+        btnDismiss.setOnClickListener { dismiss() }
+        btnConfirmPayment.setOnClickListener { handlePaymentConfirmation() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        collectFlowWithLifeCycleAtStateResume(mainViewModel.confirmPaymentUiState) { uiState ->
-            handlePaymentUiState(uiState)
-        }
-        setupConfirmButton()
-        updateUI()
-
-    }
-
-    private fun setupConfirmButton() = with(binding) {
-        val selectedPlanFlow = when (transactionType) {
-            TransactionType.RECHARGE -> mainViewModel.selectedRechargePlan
-            TransactionType.DATA_PACK -> mainViewModel.selectedDataPlan
-        }
-
-        collectFlowWithLifeCycleAtStateResume(selectedPlanFlow) { selectedPlan ->
-            btnConfirmPayment.setOnClickListener {
-                val provider = mainViewModel.currentProvider.value ?: return@setOnClickListener
-                val phone =
-                    phoneNumberViewModel.currentPhoneNumber.value ?: return@setOnClickListener
-                val amount = when (selectedPlan) {
-                    is RechargeData -> selectedPlan.amount
-                    is DataPlan -> selectedPlan.amount
-                    else -> 0.0
-                }
-                val transactionHistory = TransactionHistory(
-                    phoneNumber = phone,
-                    providerType = provider.type,
-                    transactionType = transactionType,
-                    amount = amount
-                )
-                mainViewModel.confirmPayment(transactionHistory)
-            }
+        setupListeners()
+        updatePaymentDetails()
+        collectFlowWithLifeCycleAtStateResume(mainViewModel.confirmPaymentUiState) { state ->
+            handlePaymentState(state)
         }
     }
 
-    private fun handlePaymentUiState(state: UIState<TransactionHistory>) = with(binding) {
+
+    private fun handlePaymentState(state: UIState<TransactionHistory>) = with(binding) {
         progressBar.visible(state is UIState.Loading)
         if (state is UIState.Success) {
             val action =
@@ -97,17 +76,49 @@ class PaymentBottomSheet(private val transactionType: TransactionType) :
         }
     }
 
+    private fun handlePaymentConfirmation() {
+        mainViewModel.currentProvider.value?.let { provider ->
+            val amount = when (val selectedPlan = getSelectedPlan()) {
+                is RechargeData -> selectedPlan.amount
+                is DataPlan -> selectedPlan.amount
+                else -> 0.0
+            }
+
+            transactionType?.let { type ->
+                TransactionHistory(
+                    phoneNumber = phoneNumber ?: "",
+                    providerType = provider.type,
+                    transactionType = type,
+                    amount = amount
+                ).also { history ->
+                    mainViewModel.confirmPayment(history)
+                }
+            }
+        }
+    }
+
+
+    private fun getSelectedPlan() = when (transactionType) {
+        TransactionType.RECHARGE -> mainViewModel.selectedRechargePlan.value as Any
+        TransactionType.DATA_PACK -> mainViewModel.selectedDataPlan.value as Any
+        else -> null
+    }
 
     @SuppressLint("SetTextI18n")
-    private fun updateUI() = with(binding) {
+    private fun updatePaymentDetails() = with(binding) {
         val provider = mainViewModel.currentProvider.value ?: return
-        val phone = phoneNumberViewModel.currentPhoneNumber.value ?: return
+        val selectedPlan = getSelectedPlan()
+
         tvProviderName.text = provider.type.getName()
-        ivProviderIcon.setImageResource(provider.logoPath)
-        val selectedPlan = when (transactionType) {
-            TransactionType.RECHARGE -> mainViewModel.selectedRechargePlan.value
-            TransactionType.DATA_PACK -> mainViewModel.selectedDataPlan.value
+        val logo = when (provider.type) {
+            ProviderType.ATOM -> R.drawable.atom_logo
+            ProviderType.MPT -> R.drawable.mpt_logo
+            ProviderType.OOREDOO -> R.drawable.ooredoo_logo
+            ProviderType.UNKNOWN -> 0
         }
+        ivProviderIcon.setImageResource(logo)
+        tvPhoneNumber.text = phoneNumber ?: "Loading"
+
         val amount = when (selectedPlan) {
             is RechargeData -> selectedPlan.getFormattedAmount()
             is DataPlan -> selectedPlan.getFormattedAmount()
@@ -118,16 +129,9 @@ class PaymentBottomSheet(private val transactionType: TransactionType) :
             is DataPlan -> selectedPlan.getFormattedDescription()
             else -> "Loading"
         }
+
         tvDataPlan.text = planType
         tvAmount.text = amount
-        tvPhoneNumber.text = phone
-    }
-
-
-    override fun onDestroyView() {
-        clearStates()
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun clearStates() = with(mainViewModel) {
@@ -135,8 +139,25 @@ class PaymentBottomSheet(private val transactionType: TransactionType) :
         resetSelectedPlans()
     }
 
-    companion object {
-        const val TAG = "PaymentBottomSheet"
+    override fun onDestroyView() {
+        clearStates()
+        super.onDestroyView()
     }
 
-} 
+    companion object {
+        private const val ARG_TRANSACTION_TYPE = "transactionType"
+        private const val ARG_PHONE_NUMBER = "phoneNumber"
+        const val TAG = "PaymentBottomSheet"
+        fun newInstance(transactionType: TransactionType, phoneNumber: String): PaymentBottomSheet {
+            return PaymentBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_TRANSACTION_TYPE, transactionType)
+                    putString(ARG_PHONE_NUMBER, phoneNumber)
+                }
+            }
+        }
+
+
+    }
+}
+

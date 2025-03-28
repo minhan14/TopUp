@@ -2,14 +2,26 @@ package com.chicohan.mobiletopup.helper
 
 import android.app.AlertDialog
 import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.os.Build
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.io.Serializable
+import java.util.Date
+import java.util.Locale
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 fun View.gone() {
     this.visibility = View.GONE
@@ -83,3 +95,30 @@ fun <T> Fragment.collectFlowWithLifeCycleAtStateResume(
         }
     }
 }
+
+inline fun <reified T : Serializable> Bundle.serializable(key: String): T? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getSerializable(key, T::class.java)
+    } else {
+        @Suppress("DEPRECATION")
+        getSerializable(key) as? T
+    }
+
+fun <T : ViewBinding> DialogFragment.viewBinding(
+    bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> T
+): ReadOnlyProperty<DialogFragment, T> = object : ReadOnlyProperty<DialogFragment, T> {
+    private var binding: T? = null
+
+    override fun getValue(thisRef: DialogFragment, property: KProperty<*>): T {
+        if (binding == null) {
+            binding = bindingInflater(layoutInflater, null, false)
+        }
+        return binding!!
+    }
+}
+
+fun Long.toFormattedDate(pattern: String = "MMM dd, yyyy"): String {
+    val dateFormat = SimpleDateFormat(pattern, Locale.getDefault())
+    return dateFormat.format(Date(this))
+}
+
