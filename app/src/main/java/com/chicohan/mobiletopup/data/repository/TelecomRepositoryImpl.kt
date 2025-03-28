@@ -25,7 +25,7 @@ class TelecomRepositoryImpl @Inject constructor(
         TelecomProvider(
             type = ProviderType.ATOM,
             logoPath = R.drawable.atom_logo,
-            prefixes = listOf("79", "78")
+            prefixes = listOf("79", "78","76")
         ),
         TelecomProvider(
             type = ProviderType.OOREDOO,

@@ -122,3 +122,8 @@ fun Long.toFormattedDate(pattern: String = "MMM dd, yyyy"): String {
     return dateFormat.format(Date(this))
 }
 
+fun String.isValidPhoneNumber(): Boolean {
+    val regex = "^[+]?[0-9]{7,15}$".toRegex()
+    return this.matches(regex)
+}
+

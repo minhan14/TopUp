@@ -19,6 +19,7 @@ import com.chicohan.mobiletopup.databinding.BottomSheetPaymentBinding
 import com.chicohan.mobiletopup.domain.model.UIState
 import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateResume
 import com.chicohan.mobiletopup.helper.serializable
+import com.chicohan.mobiletopup.helper.toast
 import com.chicohan.mobiletopup.helper.viewBinding
 import com.chicohan.mobiletopup.helper.visible
 import com.chicohan.mobiletopup.ui.main.MainViewModel
@@ -51,7 +52,6 @@ class PaymentBottomSheet : BottomSheetDialogFragment() {
     ): View = binding.root
 
     private fun setupListeners() = with(binding) {
-        btnDismiss.setOnClickListener { dismiss() }
         btnConfirmPayment.setOnClickListener { handlePaymentConfirmation() }
     }
 
@@ -66,6 +66,13 @@ class PaymentBottomSheet : BottomSheetDialogFragment() {
 
 
     private fun handlePaymentState(state: UIState<TransactionHistory>) = with(binding) {
+        btnDismiss.setOnClickListener {
+            if (state is UIState.Loading) {
+                requireContext().toast("Loading Please Wait!!!")
+                return@setOnClickListener
+            }
+            dismiss()
+        }
         progressBar.visible(state is UIState.Loading)
         if (state is UIState.Success) {
             val action =
@@ -129,19 +136,14 @@ class PaymentBottomSheet : BottomSheetDialogFragment() {
             is DataPlan -> selectedPlan.getFormattedDescription()
             else -> "Loading"
         }
-
         tvDataPlan.text = planType
         tvAmount.text = amount
     }
 
     private fun clearStates() = with(mainViewModel) {
         resetPaymentUiState()
-        resetSelectedPlans()
-    }
-
-    override fun onDestroyView() {
-        clearStates()
-        super.onDestroyView()
+        resetSelectedDataPlans()
+        resetSelectedRechargePlan()
     }
 
     companion object {

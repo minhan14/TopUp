@@ -41,6 +41,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     }
     private val mainViewModel by activityViewModels<MainViewModel>()
+
     private val phoneNumberViewModel by activityViewModels<PhoneNumberViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -124,6 +125,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             adapter = dataPlanAdapter
         }
         btnResetPhoneNumber.setOnClickListener {
+            mainViewModel.resetSelectedRechargePlan()
+            mainViewModel.resetSelectedDataPlans()
             phoneNumberViewModel.changePhoneNumber()
         }
         btnHistory.setOnClickListener {

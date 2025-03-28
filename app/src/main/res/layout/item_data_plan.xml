@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Elevated"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
@@ -10,8 +11,7 @@
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp"
     app:strokeColor="?attr/colorOutlineVariant"
-    app:strokeWidth="1dp"
-    style="@style/Widget.Material3.CardView.Elevated">
+    app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:id="@+id/ivDataIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="Data plan icon"
+            android:contentDescription="@string/data_plan"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +35,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:fontFamily="@font/mochipop_p_one"
             android:textAppearance="?attr/textAppearanceBodyLarge"
             android:textColor="?attr/colorOnSurface"
             app:layout_constraintEnd_toStartOf="@id/txtAmount"
@@ -49,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:fontFamily="@font/mochipop_p_one"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintEnd_toStartOf="@id/txtAmount"
@@ -61,7 +59,6 @@
             android:id="@+id/txtAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/mochipop_p_one"
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textColor="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,13 +67,12 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSelect"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/mochipop_p_one"
-            android:text="Select"
+            android:text="@string/select"
             android:textAllCaps="false"
-            style="@style/Widget.Material3.Button.TonalButton"
             app:cornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtAmount" />

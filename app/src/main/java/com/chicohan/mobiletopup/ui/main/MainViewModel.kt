@@ -1,6 +1,5 @@
 package com.chicohan.mobiletopup.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.chicohan.mobiletopup.data.db.entity.TelecomProvider
@@ -66,7 +65,8 @@ class MainViewModel @Inject constructor(
     fun setTelecomProvider(provider: TelecomProvider) = currentProvider.update { provider }
     fun setSelectedDataPlan(item: DataPlan) = selectedDataPlan.update { item }
     fun setSelectedRechargePlan(item: RechargeData?) = selectedRechargePlan.update { item }
-    fun resetSelectedPlans() = selectedDataPlan.update { null }
+    fun resetSelectedDataPlans() = selectedDataPlan.update { null }
+    fun resetSelectedRechargePlan() = selectedRechargePlan.update { null }
     fun resetPaymentUiState() = _confirmPaymentUiState.update { UIState.Idle }
 
 }
