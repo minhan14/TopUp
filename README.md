@@ -17,7 +17,7 @@ material3 https://material-foundation.github.io/material-theme-builder/
 <img src="screenshots/main.png" width="30%">
 <img src="screenshots/detail.png" width="30%">
 </div>
-<div align="center">
+<div>
 <img src="screenshots/history.png" width="30%">
 </div>
 
