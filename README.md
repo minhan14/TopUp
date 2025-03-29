@@ -11,12 +11,12 @@ material3 https://material-foundation.github.io/material-theme-builder/
 
 ## App Screenshots
 
-| Phone Screen | Main Screen | Detail Screen |
-|-------------|------------|--------------|
+| Phone Screen                      | Main Screen                      | Detail Screen                      |
+|-----------------------------------|----------------------------------|------------------------------------|
 | <img src="screenshots/phone.png"> | <img src="screenshots/main.png"> | <img src="screenshots/detail.png"> |
 
-| History Screen |
-|--------------|
+| History Screen                                  |
+|-------------------------------------------------|
 | <img src="screenshots/history.png" width="30%"> |
 
 
