@@ -1,21 +1,12 @@
 package com.chicohan.mobiletopup.data.repository
 
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
-import android.telephony.TelephonyManager
-import android.util.Log
-import androidx.annotation.RequiresPermission
-import androidx.core.app.ActivityCompat
+import com.chicohan.mobiletopup.R
 import com.chicohan.mobiletopup.data.db.dao.TelecomProviderDao
 import com.chicohan.mobiletopup.data.db.entity.ProviderType
 import com.chicohan.mobiletopup.data.db.entity.TelecomProvider
 import com.chicohan.mobiletopup.domain.repository.TelecomRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-
-import com.chicohan.mobiletopup.R
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 class TelecomRepositoryImpl @Inject constructor(
     private val telecomProviderDao: TelecomProviderDao

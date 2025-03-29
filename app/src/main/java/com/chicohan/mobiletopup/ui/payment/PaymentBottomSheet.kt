@@ -18,6 +18,7 @@ import com.chicohan.mobiletopup.data.model.RechargeData
 import com.chicohan.mobiletopup.databinding.BottomSheetPaymentBinding
 import com.chicohan.mobiletopup.domain.model.UIState
 import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateResume
+import com.chicohan.mobiletopup.helper.logo
 import com.chicohan.mobiletopup.helper.serializable
 import com.chicohan.mobiletopup.helper.toast
 import com.chicohan.mobiletopup.helper.viewBinding
@@ -51,24 +52,18 @@ class PaymentBottomSheet : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View = binding.root
 
-    private fun setupListeners() = with(binding) {
-        btnConfirmPayment.setOnClickListener { handlePaymentConfirmation() }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupListeners()
         updatePaymentDetails()
         collectFlowWithLifeCycleAtStateResume(mainViewModel.confirmPaymentUiState) { state ->
             handlePaymentState(state)
         }
     }
 
-
     private fun handlePaymentState(state: UIState<TransactionHistory>) = with(binding) {
         btnDismiss.setOnClickListener {
             if (state is UIState.Loading) {
-                requireContext().toast("Loading Please Wait!!!")
+                requireContext().toast("Transaction in process, Please Wait!!!")
                 return@setOnClickListener
             }
             dismiss()
@@ -81,6 +76,38 @@ class PaymentBottomSheet : BottomSheetDialogFragment() {
             clearStates()
             dismiss()
         }
+    }
+
+    private fun getSelectedPlan() = when (transactionType) {
+        TransactionType.RECHARGE -> mainViewModel.selectedRechargePlan.value as Any
+        TransactionType.DATA_PACK -> mainViewModel.selectedDataPlan.value as Any
+        else -> null
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updatePaymentDetails() = with(binding) {
+        val provider = mainViewModel.currentProvider.value ?: return
+        val selectedPlan = getSelectedPlan()
+
+        tvProviderName.text = provider.type.getName()
+        val logo = provider.type.logo
+        ivProviderIcon.setImageResource(logo)
+        tvPhoneNumber.text = phoneNumber ?: "Loading"
+
+        val amount = when (selectedPlan) {
+            is RechargeData -> selectedPlan.getFormattedAmount()
+            is DataPlan -> selectedPlan.getFormattedAmount()
+            else -> "Loading"
+        }
+        val planType = when (selectedPlan) {
+            is RechargeData -> "Recharge for ${selectedPlan.providerType.getName()}"
+            is DataPlan -> selectedPlan.getFormattedDescription()
+            else -> "Loading"
+        }
+        tvDataPlan.text = planType
+        tvAmount.text = amount
+
+        btnConfirmPayment.setOnClickListener { handlePaymentConfirmation() }
     }
 
     private fun handlePaymentConfirmation() {
@@ -104,46 +131,8 @@ class PaymentBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-
-    private fun getSelectedPlan() = when (transactionType) {
-        TransactionType.RECHARGE -> mainViewModel.selectedRechargePlan.value as Any
-        TransactionType.DATA_PACK -> mainViewModel.selectedDataPlan.value as Any
-        else -> null
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun updatePaymentDetails() = with(binding) {
-        val provider = mainViewModel.currentProvider.value ?: return
-        val selectedPlan = getSelectedPlan()
-
-        tvProviderName.text = provider.type.getName()
-        val logo = when (provider.type) {
-            ProviderType.ATOM -> R.drawable.atom_logo
-            ProviderType.MPT -> R.drawable.mpt_logo
-            ProviderType.OOREDOO -> R.drawable.ooredoo_logo
-            ProviderType.UNKNOWN -> 0
-        }
-        ivProviderIcon.setImageResource(logo)
-        tvPhoneNumber.text = phoneNumber ?: "Loading"
-
-        val amount = when (selectedPlan) {
-            is RechargeData -> selectedPlan.getFormattedAmount()
-            is DataPlan -> selectedPlan.getFormattedAmount()
-            else -> "Loading"
-        }
-        val planType = when (selectedPlan) {
-            is RechargeData -> "Recharge for ${selectedPlan.providerType.getName()}"
-            is DataPlan -> selectedPlan.getFormattedDescription()
-            else -> "Loading"
-        }
-        tvDataPlan.text = planType
-        tvAmount.text = amount
-    }
-
     private fun clearStates() = with(mainViewModel) {
-        resetPaymentUiState()
-        resetSelectedDataPlans()
-        resetSelectedRechargePlan()
+        resetPaymentUiState();resetSelectedDataPlans();resetSelectedRechargePlan()
     }
 
     companion object {

@@ -179,7 +179,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:fontFamily="@font/mochipop_p_one"
                     android:padding="4dp"
                     android:text="@string/proceed_to_recharge"
                     app:icon="@android:drawable/ic_input_add"

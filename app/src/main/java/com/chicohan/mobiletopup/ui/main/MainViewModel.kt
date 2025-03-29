@@ -27,7 +27,6 @@ class MainViewModel @Inject constructor(
     var selectedDataPlan = MutableStateFlow<DataPlan?>(null); private set
     var selectedRechargePlan = MutableStateFlow<RechargeData?>(null); private set
 
-
     private val _confirmPaymentUiState = MutableStateFlow<UIState<TransactionHistory>>(UIState.Idle)
     val confirmPaymentUiState = _confirmPaymentUiState.asStateFlow()
 

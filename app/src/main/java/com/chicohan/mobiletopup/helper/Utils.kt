@@ -9,12 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import com.chicohan.mobiletopup.R
+import com.chicohan.mobiletopup.data.db.entity.ProviderType
+import com.chicohan.mobiletopup.data.db.entity.TelecomProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -123,7 +127,14 @@ fun Long.toFormattedDate(pattern: String = "MMM dd, yyyy"): String {
 }
 
 fun String.isValidPhoneNumber(): Boolean {
-    val regex = "^[+]?[0-9]{7,15}$".toRegex()
-    return this.matches(regex)
+    val regex = "^(09|\\+959)\\d{7,9}$".toRegex()
+    return matches(regex)
 }
+val ProviderType.logo: Int
+    get() = when (this) {
+        ProviderType.ATOM -> R.drawable.atom_logo
+        ProviderType.MPT -> R.drawable.mpt_logo
+        ProviderType.OOREDOO -> R.drawable.ooredoo_logo
+        ProviderType.UNKNOWN -> 0
+    }
 

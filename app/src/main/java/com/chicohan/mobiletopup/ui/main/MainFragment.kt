@@ -17,6 +17,7 @@ import com.chicohan.mobiletopup.databinding.FragmentMainBinding
 import com.chicohan.mobiletopup.databinding.ItemChipsBinding
 import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateResume
 import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateStart
+import com.chicohan.mobiletopup.helper.logo
 import com.chicohan.mobiletopup.helper.toast
 import com.chicohan.mobiletopup.ui.adapter.DataPlanAdapter
 import com.chicohan.mobiletopup.ui.payment.PaymentBottomSheet
@@ -60,8 +61,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             rechargeGroup.removeAllViews()
             rechargePlans.forEachIndexed { _, item ->
                 val selected = mainViewModel.selectedRechargePlan.value
-                val chip =
-                    ItemChipsBinding.inflate(layoutInflater, rechargeGroup, false).root as Chip
+                val chip = ItemChipsBinding.inflate(layoutInflater, rechargeGroup, false).root as Chip
                 chip.apply {
                     text = item.getFormattedAmount()
                     isCheckable = true
@@ -71,7 +71,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     }
                     rechargeGroup.addView(this)
                 }
-
             }
         }
     }
@@ -95,12 +94,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         "Provider: ${providerInfo.type.getName()}, LogoPath: ${providerInfo.logoPath}"
                     )
                     binding.txtProvider.text = providerInfo.type.getName()
-                    val logo = when (providerInfo.type) {
-                        ProviderType.ATOM -> R.drawable.atom_logo
-                        ProviderType.MPT -> R.drawable.mpt_logo
-                        ProviderType.OOREDOO -> R.drawable.ooredoo_logo
-                        ProviderType.UNKNOWN -> 0
-                    }
+                    val logo = providerInfo.type.logo
                     glide.load(logo).into(binding.ivProviderIcon)
 //                    glide.load(providerInfo.logoPath).into(binding.ivProviderIcon)
                     mainViewModel.setTelecomProvider(providerInfo)

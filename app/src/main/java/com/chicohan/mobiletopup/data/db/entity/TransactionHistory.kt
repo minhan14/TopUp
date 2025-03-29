@@ -25,12 +25,19 @@ data class TransactionHistory(
     fun getFormattedAmount(): String {
         return "%,.0f %s".format(amount, currency)
     }
+
     fun getFormattedTransactionTime(): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd h:mm a", Locale.getDefault())
         return sdf.format(Date(transactionTime))
     }
-}
 
+    fun getDetailTransactionTypeName(): String {
+        return when (transactionType) {
+            TransactionType.RECHARGE -> "Recharge for ${providerType.getName()}"
+            TransactionType.DATA_PACK -> "Buy Data Pack for ${providerType.getName()}"
+        }
+    }
+}
 
 enum class TransactionStatus {
     SUCCESS, PENDING, FAILED
@@ -40,9 +47,10 @@ enum class TransactionType {
     RECHARGE, DATA_PACK
 }
 
-fun TransactionType.getDetailTransactionTypeName(providerType: ProviderType): String {
+fun TransactionStatus.getName(): String {
     return when (this) {
-        TransactionType.RECHARGE -> "Recharge for ${providerType.getName()}"
-        TransactionType.DATA_PACK -> "Buy Data Pack for ${providerType.getName()}"
+        TransactionStatus.SUCCESS -> "Success"
+        TransactionStatus.PENDING -> "Pending"
+        TransactionStatus.FAILED -> "Failed"
     }
 }

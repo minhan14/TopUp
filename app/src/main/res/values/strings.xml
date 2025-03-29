@@ -33,4 +33,5 @@
     <string name="date_filter_icon">Date filter icon</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
+    <string name="buy_pack">Buy pack</string>
 </resources>

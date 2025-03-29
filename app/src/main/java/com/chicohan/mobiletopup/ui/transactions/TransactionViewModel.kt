@@ -8,6 +8,7 @@ import com.chicohan.mobiletopup.data.db.entity.TransactionStatus
 import com.chicohan.mobiletopup.data.db.entity.getName
 import com.chicohan.mobiletopup.domain.repository.TransactionHistoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -42,7 +44,7 @@ class TransactionViewModel @Inject constructor(
             } else {
                 transactionHistoryRepository.getAllTransactionHistory()
             }
-        }
+        }.flowOn(Dispatchers.IO)
 
     val transactionHistoryList: StateFlow<List<TransactionHistory>> = combine(
         transactionsFlow,
@@ -65,11 +67,7 @@ class TransactionViewModel @Inject constructor(
 
             matchesStatus && matchesProvider && matchesQuery
         }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
-        emptyList()
-    )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     fun setSearchQuery(query: String) = filters.update { it.copy(searchQuery = query) }
 

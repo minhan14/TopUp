@@ -16,10 +16,12 @@ import com.chicohan.mobiletopup.data.db.entity.TransactionHistory
 import com.chicohan.mobiletopup.data.db.entity.TransactionStatus
 import com.chicohan.mobiletopup.databinding.FragmentTransactionHistoryBinding
 import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateResume
+import com.chicohan.mobiletopup.helper.collectFlowWithLifeCycleAtStateStart
 import com.chicohan.mobiletopup.helper.toFormattedDate
 import com.chicohan.mobiletopup.helper.visible
 import com.chicohan.mobiletopup.ui.adapter.TransactionHistoryAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -52,24 +54,23 @@ class TransactionHistoryFragment : Fragment(R.layout.fragment_transaction_histor
 
     private fun observeUIState() {
 
-        collectFlowWithLifeCycleAtStateResume(transactionViewModel.transactionHistoryList) {
-            transactionAdapter.submitList(it)
-            binding.tvEmptyState.visible(it.isEmpty())
-        }
-
-        collectFlowWithLifeCycleAtStateResume(transactionViewModel.isDateFilterExpanded) { isExpanded ->
+        collectFlowWithLifeCycleAtStateStart(transactionViewModel.isDateFilterExpanded) { isExpanded ->
             binding.dateFilterContainer.visible(isExpanded)
             binding.btnToggleDateFilter.setIconResource(
                 if (isExpanded) R.drawable.baseline_keyboard_arrow_up_24
                 else R.drawable.baseline_keyboard_arrow_down_24
             )
         }
-        collectFlowWithLifeCycleAtStateResume(transactionViewModel.filters) { filters ->
+        collectFlowWithLifeCycleAtStateStart(transactionViewModel.filters) { filters ->
             val startDate = filters.startDate?.toFormattedDate()
             val endDate = filters.endDate?.toFormattedDate()
             binding.tvStartDate.text = startDate ?: getString(R.string.select)
             binding.tvEndDate.text = endDate ?: getString(R.string.select)
             binding.btnClearDateFilter.visible(endDate != null && startDate != null)
+        }
+        collectFlowWithLifeCycleAtStateStart(transactionViewModel.transactionHistoryList) {
+            transactionAdapter.submitList(it)
+            binding.tvEmptyState.visible(it.isEmpty())
         }
     }
 
@@ -129,7 +130,6 @@ class TransactionHistoryFragment : Fragment(R.layout.fragment_transaction_histor
                 requireContext(),
                 { _, year, month, dayOfMonth ->
                     set(year, month, dayOfMonth)
-
 
                     if (isStartDate) {
                         set(Calendar.HOUR_OF_DAY, 0)

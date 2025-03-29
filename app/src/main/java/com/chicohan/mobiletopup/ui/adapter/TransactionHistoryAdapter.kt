@@ -6,12 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import com.chicohan.mobiletopup.R
-import com.chicohan.mobiletopup.data.db.entity.ProviderType
 import com.chicohan.mobiletopup.data.db.entity.TransactionHistory
-import com.chicohan.mobiletopup.data.db.entity.getDetailTransactionTypeName
 import com.chicohan.mobiletopup.data.db.entity.getName
 import com.chicohan.mobiletopup.databinding.ItemTransactionHistoryBinding
+import com.chicohan.mobiletopup.helper.logo
 
 class TransactionHistoryAdapter(
     private val glide: RequestManager,
@@ -56,22 +54,17 @@ class TransactionHistoryAdapter(
             tvPhoneNumber.text = item.phoneNumber
             tvAmount.text = item.getFormattedAmount()
             tvDate.text = item.getFormattedTransactionTime()
-            chipStatus.text = item.status.name
-            tvTransactionType.text =
-                item.transactionType.getDetailTransactionTypeName(item.providerType)
-            when (item.providerType) {
-                ProviderType.ATOM -> animationState.setImageResource(R.drawable.atom_logo)
-                ProviderType.MPT -> animationState.setImageResource(R.drawable.mpt_logo)
-                ProviderType.OOREDOO -> animationState.setImageResource(R.drawable.ooredoo_logo)
-                ProviderType.UNKNOWN -> Unit
-            }
+            chipStatus.text = item.status.getName()
+            tvTransactionType.text = item.getDetailTransactionTypeName()
+               // item.transactionType.getDetailTransactionTypeName(item.providerType)
+            val logo = item.providerType.logo
+            glide.load(logo).into(animationState)
 //            when (item.status) {
 //                TransactionStatus.SUCCESS -> animationState.setAnimation(R.raw.lottie_payment_success)
 //                TransactionStatus.PENDING -> Unit
 //                TransactionStatus.FAILED -> animationState.setAnimation(R.raw.lottie_error_animation)
 //
 //            }
-//            glide.load(item.pr).into(ivDataIcon)
         }
     }
 }

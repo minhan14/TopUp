@@ -14,7 +14,7 @@ class DetectProviderUseCase @Inject constructor(
             return Result.failure(Exception("Phone number can not be empty!!"))
         }
         if (!mobileNumber.isValidPhoneNumber()) {
-            return Result.failure(Exception("It is not a valid phone number!!"))
+            return Result.failure(Exception("Please provide phone number in correct format!!"))
         }
         return runCatching {
             telecomRepository.detectProviderFromNumber(mobileNumber)

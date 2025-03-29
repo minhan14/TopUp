@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.chicohan.mobiletopup.R
 import com.chicohan.mobiletopup.data.db.entity.TransactionStatus
-import com.chicohan.mobiletopup.data.db.entity.getDetailTransactionTypeName
 import com.chicohan.mobiletopup.data.db.entity.getName
 import com.chicohan.mobiletopup.databinding.FragmentTransactionSuccessBinding
 
@@ -43,8 +42,8 @@ class TransactionSuccessFragment : Fragment(R.layout.fragment_transaction_succes
             }
             tvTransactionId.text = transactionHistory.transactionId
             tvProviderName.text = transactionHistory.providerType.getName()
-            tvTransactionType.text =
-                transactionHistory.transactionType.getDetailTransactionTypeName(transactionHistory.providerType)
+            tvTransactionType.text = transactionHistory.getDetailTransactionTypeName()
+//                transactionHistory.transactionType.getDetailTransactionTypeName(transactionHistory.providerType)
             tvAmount.text = transactionHistory.getFormattedAmount()
             tvDate.text = transactionHistory.getFormattedTransactionTime()
 
